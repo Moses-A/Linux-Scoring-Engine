@@ -46,6 +46,13 @@ def group_check(user):
       points.append('Added '+user+' To The Sudo Group')
 
 
+def malware_check(file_path):
+   if not os.path.isfile(file_path):
+      global score
+      score = score+1
+      points.append('Removed Harmful File')
+
+
 def user_check(user):
    jenny = 0
    for line in open('/etc/passwd'):
@@ -69,9 +76,11 @@ def main():
    user_check('jennylewis')
    user_check('moses')
    group_check('juan')
-   user_passwd('cyber', '$6$lrbIb')
+   user_passwd('cyber', '$6$FicC')
    user_passwd('jimmy', '$6$QMoj')
    user_passwd('ben',   '$6$SkT') 
+   malware_check('/home/cyber/.virus.py')
+   malware_check('/root/Firewall/setup.py')
    for point in points:
        print point
    print str(score),"/20 Total Points"
