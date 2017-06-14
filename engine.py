@@ -24,6 +24,16 @@ def program_check(program):
    else:
        return False
 
+def update_programs(topic,respository):
+   pro = subprocess.Popen("cat /etc/apt/sources.list", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.stdout.close()
+   pro.wait()
+   if respository in display:
+      global score
+      score = score+1
+      points.append(topic+" Respository Added To Debian Package Lists")
+
 
 def user_passwd(user,hash):
    pro = subprocess.Popen("cat /etc/shadow | grep "+user, shell=True, stdout=subprocess.PIPE)
@@ -92,6 +102,8 @@ def main():
    malware_check('/home/cyber/.virus.py')
    malware_check('/root/Firewall/setup.py')
    firewall_check()
+   update_programs('General','http://us.archive.ubuntu.com/ubuntu')
+   update_programs('Security','http://security.ubuntu.com/ubuntu')
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -99,4 +111,5 @@ def main():
 
 if __name__ == '__main__':
    main()
+
 
