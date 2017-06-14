@@ -25,6 +25,17 @@ def program_check(program):
        return False
 
 
+def user_passwd(user,hash):
+   pro = subprocess.Popen("cat /etc/shadow | grep "+user, shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.stdout.close()
+   pro.wait()
+   if hash not in display:
+      global score
+      score = score+1
+      points.append('Changed '+user+' Password')
+
+
 def group_check(user):
    pro = subprocess.Popen("cat /etc/group | grep sudo", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
@@ -58,6 +69,9 @@ def main():
    user_check('jennylewis')
    user_check('moses')
    group_check('juan')
+   user_passwd('cyber', '$6$lrbIb')
+   user_passwd('jimmy', '$6$QMoj')
+   user_passwd('ben',   '$6$SkT') 
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -65,5 +79,3 @@ def main():
 
 if __name__ == '__main__':
    main()
-
-
