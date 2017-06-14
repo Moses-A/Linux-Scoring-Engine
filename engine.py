@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # Author is Moses Arocha
 
+
 import os
 import pwd
 import re
@@ -22,6 +23,16 @@ def program_check(program):
        return True
    else:
        return False
+
+
+def group_check(user):
+   pro = subprocess.Popen("cat /etc/group | grep sudo", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.wait()
+   if user in display:
+      global score
+      score = score+1
+      points.append('Added '+user+' To The Sudo Group')
 
 
 def user_check(user):
@@ -46,11 +57,13 @@ def main():
       points.append('Removed The Tool Medusa')
    user_check('jennylewis')
    user_check('moses')
+   group_check('juan')
    for point in points:
        print point
    print str(score),"/20 Total Points"
-  
+
 
 if __name__ == '__main__':
    main()
+
 
