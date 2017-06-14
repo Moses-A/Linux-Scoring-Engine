@@ -1,5 +1,5 @@
 #!/usr/bin/python2
-
+# Author is Moses Arocha
 
 import os
 import pwd
@@ -23,28 +23,34 @@ def program_check(program):
    else:
        return False
 
-def user_check(user,score):
+
+def user_check(user):
    jenny = 0
    for line in open('/etc/passwd'):
        if user in line:
-           jenny = 1 
+           jenny = 1
    if jenny == 0:
-       score = score +1
+       global score
+       score = score+1
        points.append('Removed The User '+user)
 
 
-def main(score,points):
+def main():
+   global score
+   global points
    if not program_check('nmap'):
       score = score+1
       points.append('Removed The Tool Nmap')
    if not program_check('medusa'):
       score = score+1
       points.append('Removed The Tool Medusa')
-   user_check('jennylewis',score)
+   user_check('jennylewis')
+   user_check('moses')
    for point in points:
        print point
    print str(score),"/20 Total Points"
-
+  
 
 if __name__ == '__main__':
-   main(score,points)
+   main()
+
