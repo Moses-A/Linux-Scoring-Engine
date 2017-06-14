@@ -24,6 +24,7 @@ def program_check(program):
    else:
        return False
 
+
 def update_programs(topic,respository):
    pro = subprocess.Popen("cat /etc/apt/sources.list", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
@@ -56,6 +57,7 @@ def firewall_check():
       score = score+1
       points.append('Enabled The Firewall')
 
+
 def group_check(user):
    pro = subprocess.Popen("cat /etc/group | grep sudo", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
@@ -64,6 +66,21 @@ def group_check(user):
       global score
       score = score+1
       points.append('Added '+user+' To The Sudo Group')
+
+def password_complexity():
+   global score
+   pro = subprocess.Popen("cat /etc/pam.d/common-password", shell=True, stdout=subprocess.PIPE)
+   display=pro.stdout.read()
+   pro.wait()
+   if "remember=5" in display:
+     score = score+1
+     points.append('Added Password History')
+   if "minlen=8" in display:
+     score = score+1
+     points.append('Enforced Password Length')
+   if "ucredit" and "lcredit" and "dcredit" and "ocredit" in display:
+     score = score+3
+     points.append('Added Password Complexity')
 
 
 def malware_check(file_path):
@@ -104,6 +121,7 @@ def main():
    firewall_check()
    update_programs('General','http://us.archive.ubuntu.com/ubuntu')
    update_programs('Security','http://security.ubuntu.com/ubuntu')
+   password_complexity()
    for point in points:
        print point
    print str(score),"/20 Total Points"
