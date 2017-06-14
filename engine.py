@@ -36,6 +36,16 @@ def user_passwd(user,hash):
       points.append('Changed '+user+' Password')
 
 
+def firewall_check():
+   pro = subprocess.Popen("ufw status", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.stdout.close()
+   pro.wait()
+   if ' active' in display:
+      global score
+      score = score+1
+      points.append('Enabled The Firewall')
+
 def group_check(user):
    pro = subprocess.Popen("cat /etc/group | grep sudo", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
@@ -81,6 +91,7 @@ def main():
    user_passwd('ben',   '$6$SkT') 
    malware_check('/home/cyber/.virus.py')
    malware_check('/root/Firewall/setup.py')
+   firewall_check()
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -88,3 +99,4 @@ def main():
 
 if __name__ == '__main__':
    main()
+
