@@ -23,20 +23,24 @@ def program_check(program):
    else:
        return False
 
-def user_check():
+def user_check(user,score):
+   jenny = 0
    for line in open('/etc/passwd'):
-       if 'jennylewis' in line:
-           jennylewis = True
-       if not jennylewis:
-           score = score +1
-           points.append('Removed The User Jenny Lewis')
+       if user in line:
+           jenny = 1 
+   if jenny == 0:
+       score = score +1
+       points.append('Removed The User '+user)
 
 
 def main(score,points):
    if not program_check('nmap'):
       score = score+1
       points.append('Removed The Tool Nmap')
-   user_check()
+   if not program_check('medusa'):
+      score = score+1
+      points.append('Removed The Tool Medusa')
+   user_check('jennylewis',score)
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -44,4 +48,3 @@ def main(score,points):
 
 if __name__ == '__main__':
    main(score,points)
-
