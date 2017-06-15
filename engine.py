@@ -26,44 +26,44 @@ def program_check(program):
 
 
 def update_programs(topic,respository):
+   global score
    pro = subprocess.Popen("cat /etc/apt/sources.list", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
    pro.stdout.close()
    pro.wait()
    if respository in display:
-      global score
       score = score+1
       points.append(topic+" Respository Added To Debian Package Lists")
 
 
 def user_passwd(user,hash):
+   global score
    pro = subprocess.Popen("cat /etc/shadow | grep "+user, shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
    pro.stdout.close()
    pro.wait()
    if hash not in display:
-      global score
       score = score+1
       points.append('Changed '+user+' Password')
 
 
 def firewall_check():
+   global score
    pro = subprocess.Popen("ufw status", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
    pro.stdout.close()
    pro.wait()
    if ' active' in display:
-      global score
       score = score+1
       points.append('Enabled The Firewall')
 
 
 def group_check(user):
+   global score
    pro = subprocess.Popen("cat /etc/group | grep sudo", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
    pro.wait()
    if user in display:
-      global score
       score = score+1
       points.append('Added '+user+' To The Sudo Group')
 
@@ -115,20 +115,31 @@ def guest_account(file_path):
         points.append('Disabled Guest Account')
 
 
+def apache_security(file):
+   global score
+   if os.path.isfile(file):
+      pro = subprocess.Popen("cat /etc/apache2/conf-available/" +file, shell=True, stdout=subprocess.PIPE)
+      display = pro.stdout.read()
+      pro.wait()
+      if "ServerSignature" and "ServerTokens" in display:
+          score = score+1
+          points.append('Secured Apache Web Server')
+
+
 def malware_check(file_path):
+   global score
    if not os.path.isfile(file_path):
-      global score
       score = score+1
       points.append('Removed Harmful File')
 
 
 def user_check(user):
+   global score
    jenny = 0
    for line in open('/etc/passwd'):
        if user in line:
            jenny = 1
    if jenny == 0:
-       global score
        score = score+1
        points.append('Removed The User '+user)
 
@@ -157,6 +168,7 @@ def main():
    password_history()
    account_policy()
    guest_account('/etc/lightdm/lightdm.conf')
+   apache_security('myconf.conf')
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -164,3 +176,5 @@ def main():
 
 if __name__ == '__main__':
    main()
+
+
