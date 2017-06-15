@@ -125,9 +125,22 @@ def apache_security(file):
           score = score+1
           points.append('Secured Apache Web Server')
 
+
 def ssh_security():
    global score
-   pro = subprocess.Popen("cat 
+   pro = subprocess.Popen("cat /etc/ssh/sshd_config | grep PermitRootLogin", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.wait()
+   if "no" in display:
+     score = score+1
+     points.append('Disabled Root Login for SSH')
+     subpro = subprocess.Popen("cat /etc/ssh/sshd_config ", shell=True, stdout=subprocess.PIPE)
+     subdisplay = subpro.stdout.read()
+     subpro.wait()
+     if "AllowUsers" or "AllowGroup" in display:
+        score = score+1
+        points.append('Secured SSH User Login')
+
 
 def malware_check(file_path):
    global score
@@ -172,6 +185,7 @@ def main():
    account_policy()
    guest_account('/etc/lightdm/lightdm.conf')
    apache_security('/etc/apache2/conf-available/myconf.conf')
+   ssh_security()
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -179,5 +193,3 @@ def main():
 
 if __name__ == '__main__':
    main()
-
-
