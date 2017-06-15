@@ -87,7 +87,7 @@ def password_complexity():
 def password_history():
    global score
    pro = subprocess.Popen("cat /etc/login.defs", shell=True, stdout=subprocess.PIPE)
-   display=pro.stdout.read()
+   display = pro.stdout.read()
    pro.wait()
    if "PASS_MAX_DAYS " and "PASS_MIN_DAYS " and "PASS_WARN_AGE " in display:
      score = score+1
@@ -97,9 +97,22 @@ def password_history():
 def account_policy():
    global score
    pro = subprocess.Popen("cat /etc/pam.d/common-auth", shell=True, stdout=subprocess.PIPE)
-   display.pro.stdout.read()
+   display = pro.stdout.read()
    pro.wait()
-    
+   if "deny=" and "unlock_time=" in display:
+      score = score+1
+      points.append('Set Account Policy Standards') 
+
+
+def guest_account(file_path):
+   global score
+   if os.path.isfile(file_path):
+     pro = subprocess.Popen("cat "+file_path, shell=True, stdout=subprocess.PIPE)
+     display = pro.stdout.read()
+     pro.wait()
+     if "allow-guest=false" in display:
+        score = score+1
+        points.append('Disabled Guest Account')
 
 
 def malware_check(file_path):
@@ -142,6 +155,8 @@ def main():
    update_programs('Security','http://security.ubuntu.com/ubuntu')
    password_complexity()
    password_history()
+   account_policy()
+   guest_account('/etc/lightdm/lightdm.conf')
    for point in points:
        print point
    print str(score),"/20 Total Points"
@@ -149,5 +164,3 @@ def main():
 
 if __name__ == '__main__':
    main()
-
-
