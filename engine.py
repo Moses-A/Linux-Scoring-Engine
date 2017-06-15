@@ -118,13 +118,16 @@ def guest_account(file_path):
 def apache_security(file):
    global score
    if os.path.isfile(file):
-      pro = subprocess.Popen("cat /etc/apache2/conf-available/" +file, shell=True, stdout=subprocess.PIPE)
+      pro = subprocess.Popen("cat " +file, shell=True, stdout=subprocess.PIPE)
       display = pro.stdout.read()
       pro.wait()
       if "ServerSignature" and "ServerTokens" in display:
           score = score+1
           points.append('Secured Apache Web Server')
 
+def ssh_security():
+   global score
+   pro = subprocess.Popen("cat 
 
 def malware_check(file_path):
    global score
@@ -168,7 +171,7 @@ def main():
    password_history()
    account_policy()
    guest_account('/etc/lightdm/lightdm.conf')
-   apache_security('myconf.conf')
+   apache_security('/etc/apache2/conf-available/myconf.conf')
    for point in points:
        print point
    print str(score),"/20 Total Points"
