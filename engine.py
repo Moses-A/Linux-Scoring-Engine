@@ -132,14 +132,14 @@ def ssh_security():
    display = pro.stdout.read()
    pro.wait()
    if "no" in display:
-     score = score+1
-     points.append('Disabled Root Login for SSH')
-     subpro = subprocess.Popen("cat /etc/ssh/sshd_config ", shell=True, stdout=subprocess.PIPE)
-     subdisplay = subpro.stdout.read()
-     subpro.wait()
-     if "AllowUsers" or "AllowGroup" in display:
-        score = score+1
-        points.append('Secured SSH User Login')
+      score = score+1
+      points.append('Disabled Root Login for SSH')
+   subpro = subprocess.Popen("cat /etc/ssh/sshd_config", shell=True, stdout=subprocess.PIPE)
+   subdisplay = subpro.stdout.read()
+   subpro.wait()
+   if "AllowUsers" in subdisplay:
+      score = score+1
+      points.append('Secured SSH User Login')
 
 
 def malware_check(file_path):
@@ -193,3 +193,5 @@ def main():
 
 if __name__ == '__main__':
    main()
+
+
