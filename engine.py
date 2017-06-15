@@ -25,6 +25,18 @@ def program_check(program):
        return False
 
 
+def waf_check():
+   global score
+   if os.path.isfile("/etc/modsecurity/modsecurity.conf-recommended"):
+       pro = subprocess.Popen("cat /etc/modsecurity/modsecurity.conf-recommended", shell=True, stdout=subprocess.PIPE)
+       display = pro.stdout.read()
+       pro.stdout.close()
+       pro.wait()
+       if "SecRequestBodyAccess Off" in display:
+           score = score+1
+           points.append("Added WAF Protection to Apache Server")
+
+
 def update_programs(topic,respository):
    global score
    pro = subprocess.Popen("cat /etc/apt/sources.list", shell=True, stdout=subprocess.PIPE)
@@ -142,6 +154,16 @@ def ssh_security():
       points.append('Secured SSH User Login')
 
 
+def php_security():
+   global score
+   pro = subprocess.Popen("cat /etc/php/7.0/apache2/php.ini | grep expose_php", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.wait()
+   if "Off" in display:
+     score = score+1
+     points.append('Secured PHP Version')
+
+
 def malware_check(file_path):
    global score
    if not os.path.isfile(file_path):
@@ -186,9 +208,11 @@ def main():
    guest_account('/etc/lightdm/lightdm.conf')
    apache_security('/etc/apache2/conf-available/myconf.conf')
    ssh_security()
+   php_security()
+   waf_check()
    for point in points:
        print point
-   print str(score),"/20 Total Points"
+   print str(score),"/25 Total Points"
 
 
 if __name__ == '__main__':
