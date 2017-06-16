@@ -153,6 +153,14 @@ def ssh_security():
       score = score+1
       points.append('Secured SSH User Login')
 
+def samba_security():
+   global score
+   pro = subprocess.Popen("cat /etc/samba/smb.conf", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.wait()
+   if "guest ok = no" in display:
+      score = score+1
+      points.append('Secured Samba Server')
 
 def php_security():
    global score
