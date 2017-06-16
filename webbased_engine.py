@@ -128,7 +128,9 @@ def account_policy():
    pro.wait()
    if "deny=" and "unlock_time=" in display:
       score = score+1
-      points.append('Set Account Policy Standards') 
+      f = open('index.html', 'a')
+      f.write('Set Account Policy Standards')
+      f.close()
 
 
 def guest_account(file_path):
@@ -139,7 +141,9 @@ def guest_account(file_path):
      pro.wait()
      if "allow-guest=false" in display:
         score = score+1
-        points.append('Disabled Guest Account')
+        f = open('index.html', 'a')
+        f.write('Disabled Guest Account')
+        f.close()
 
 
 def apache_security(file):
@@ -150,7 +154,9 @@ def apache_security(file):
       pro.wait()
       if "ServerSignature" and "ServerTokens" in display:
           score = score+1
-          points.append('Secured Apache Web Server')
+          f = open('index.html', 'a')
+          f.write('Secured Apache Web Server')
+          f.close()
 
 
 def ssh_security():
@@ -158,15 +164,29 @@ def ssh_security():
    pro = subprocess.Popen("cat /etc/ssh/sshd_config | grep PermitRootLogin", shell=True, stdout=subprocess.PIPE)
    display = pro.stdout.read()
    pro.wait()
+   f = open('index.html', 'a')
    if "no" in display:
       score = score+1
-      points.append('Disabled Root Login for SSH')
+      f.write('Disabled Root Login for SSH')
    subpro = subprocess.Popen("cat /etc/ssh/sshd_config", shell=True, stdout=subprocess.PIPE)
    subdisplay = subpro.stdout.read()
    subpro.wait()
    if "AllowUsers" in subdisplay:
       score = score+1
-      points.append('Secured SSH User Login')
+      f.write('Secured SSH User Login')
+      f.close()
+
+
+def samba_security():
+   global score
+   pro = subprocess.Popen("cat /etc/samba/smb.conf", shell=True, stdout=subprocess.PIPE)
+   display = pro.stdout.read()
+   pro.wait()
+   f = open('index.html', 'a')
+   if "guest ok = no" in display:
+      score = score+1
+      f.write('Secured Samba Server')
+      f.close()
 
 
 def php_security():
@@ -176,14 +196,18 @@ def php_security():
    pro.wait()
    if "Off" in display:
      score = score+1
-     points.append('Secured PHP Version')
+     f = open('index.html', 'a')
+     f.write('secured PHP Version')
+     f.close()
 
 
 def malware_check(file_path):
    global score
    if not os.path.isfile(file_path):
       score = score+1
-      points.append('Removed Harmful File')
+      f = open('index.html', 'a')
+      f.write('Removed Harmful File')
+      f.close()
 
 
 def user_check(user):
@@ -194,7 +218,9 @@ def user_check(user):
            jenny = 1
    if jenny == 0:
        score = score+1
-       points.append('Removed The User '+user)
+       f = open('index.html','a')
+       f.write('Removed The User '+user)
+       f.close()
 
 
 def main():
@@ -202,10 +228,14 @@ def main():
    global points
    if not program_check('nmap'):
       score = score+1
-      points.append('Removed The Tool Nmap')
+      f = open('index.html','a')
+      f.write('Removed The Tool Nmap')
+      f.close()
    if not program_check('medusa'):
       score = score+1
-      points.append('Removed The Tool Medusa')
+      d = open('index.html','a')
+      d.write('Removed The Tool Medusa')
+      d.close()
    user_check('jennylewis')
    user_check('moses')
    group_check('juan')
@@ -225,6 +255,7 @@ def main():
    ssh_security()
    php_security()
    waf_check()
+   samba_security()
    for point in points:
        print point
    print str(score),"/25 Total Points"
