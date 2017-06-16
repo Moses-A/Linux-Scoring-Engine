@@ -217,6 +217,7 @@ def main():
    apache_security('/etc/apache2/conf-available/myconf.conf')
    ssh_security()
    php_security()
+   samba_security()
    waf_check()
    for point in points:
        print point
