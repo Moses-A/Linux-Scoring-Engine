@@ -36,7 +36,7 @@ My recommendation for setting up terminal based engine:
 
 
 
-#Acknowledgements
+# Acknowledgements
 
  This scoring engine was created on the behalf of both Holmes and Business Careers
  
