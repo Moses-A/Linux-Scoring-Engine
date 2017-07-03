@@ -9,6 +9,20 @@ import socket
 import subprocess
 import sys
 
+#!/usr/bin/python2
+
+import subprocess as n
+import pygame
+import time
+
+
+n.call(['notify-send', 'foo', 'bar'])
+pygame.init()
+pygame.mixer.music.load("/home/moses/Music/smb_stage_clear.mp3")
+pygame.mixer.music.play()
+time.sleep(10)
+
+
 
 score = 0
 points = []
