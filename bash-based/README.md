@@ -1,4 +1,4 @@
-#How to implement the script into a virtual machine.
+# How to implement the script into a virtual machine.
 
 Disclaimer: the current script was written for Ubuntu 16.04, as long as the OS uses the bash shell however, it should work
 as intended.
