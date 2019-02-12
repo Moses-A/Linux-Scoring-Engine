@@ -1,4 +1,4 @@
-How to implement the script into a virtual machine.
+#How to implement the script into a virtual machine.
 
 Disclaimer: the current script was written for Ubuntu 16.04, as long as the OS uses the bash shell however, it should work
 as intended.
@@ -10,10 +10,10 @@ Start up the Ubuntu virtual machine, make sure not to run any updates, as this s
 
 First you must login as root.
 Next, you will copy the file into the /usr/local/bin directory. From here, you will run the following commands:
-# chmod 111 /usr/local/bin/scoring.bash
+ chmod 111 /usr/local/bin/scoring.bash
 
 Next, you will create cron job for the script to run every 30 seconds:
-# crontab -e
+ crontab -e
 
 Then insert the following line at the end of the file :
 */30 * * * * /usr/local/bin/scoring.bash
