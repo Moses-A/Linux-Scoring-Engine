@@ -9,5 +9,14 @@ Start up the Ubuntu virtual machine, make sure not to run any updates, as this s
 3. security updates
 
 First you must login as root.
-Next you will copy the file into the /usr/local/bin directory. From here, you will run the following commands:
-$ chmod a-uw
+Next, you will copy the file into the /usr/local/bin directory. From here, you will run the following commands:
+# chmod 111 /usr/local/bin/scoring.bash
+
+Next, you will create cron job for the script to run every 30 seconds:
+# crontab -e
+
+Then insert the following line at the end of the file :
+*/30 * * * * /usr/local/bin/scoring.bash
+
+Finally save the file and exit.
+
